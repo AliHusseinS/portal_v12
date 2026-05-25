@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بوابة الخدمات الرقمية | كلية التخطيط العمراني - جامعة الكوفة</title>
+  <!-- Google Fonts: Cairo & Amiri -->
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      /* Deep Obsidian Emerald & Luxury Champagne Gold */
+      --bg-color: #020706;
+      --bg-gradient: radial-gradient(circle at 50% 50%, #031410 0%, #010605 100%);
+      --glass-bg: rgba(5, 12, 10, 0.85);
+      --glass-border: rgba(212, 175, 55, 0.18);
+      --glass-border-hover: rgba(212, 175, 55, 0.65);
+      
+      --text-main: #f8fafc;
+      --text-sub: #8fa5a0;
+      --text-desc: #cbd5e1;
+      
+      /* Theme Gold & Teal Colors */
+      --gold: #d4af37; /* Champagne Gold */
+      --gold-dark: #8c6d3e;
+      --teal-primary: #004d40;
+      --teal-glow: rgba(0, 105, 92, 0.3);
+      --core-glow: 0 0 60px rgba(212, 175, 55, 0.4);
+      --success: #10b981;
+      --glass-blur: blur(25px);
+
+      /* Subtle laser lines by default, clear node label background/border */
+      --laser-idle: rgba(212, 175, 55, 0.08);
+      --label-bg: rgba(2, 7, 6, 0.94);
+      --label-border: rgba(212, 175, 55, 0.5);
+    }
+
+    [data-theme="light"] {
+      /* Royal Alabaster & Antique Bronze Gold */
+      --bg-color: #f7f6f0;
+      --bg-gradient: linear-gradient(135deg, #fbfaf5 0%, #eeeae2 50%, #e5e0d4 100%);
+      --glass-bg: rgba(255, 255, 255, 0.92);
+      --glass-border: rgba(140, 109, 62, 0.2);
+      --glass-border-hover: rgba(140, 109, 62, 0.65);
+      
+      --text-main: #111b27;
+      --text-sub: #71807d;
+      --text-desc: #334155;
+      
+      --gold: #8c6d3e;
+      --gold-dark: #664d28;
+      --teal-primary: #004d40;
+      --teal-glow: rgba(0, 77, 64, 0.08);
+      --core-glow: 0 0 45px rgba(140, 109, 62, 0.25);
+
+      --laser-idle: rgba(140, 109, 62, 0.08);
+      --label-bg: rgba(255, 255, 255, 0.95);
+      --label-border: rgba(140, 109, 62, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: var(--bg-color);
+      background-image: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      perspective: 1600px;
+      transition: background-color 0.8s ease, background-image 0.8s ease;
+    }
+
+    /* ===== Live interactive gold particles & nebula canvas ===== */
+    #nebulaCanvas {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      opacity: 0.85;
+    }
+
+    /* Shifting Ambient Glow Aura */
+    .ambient-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(212, 175, 55, 0.04) 0%, transparent 60%);
+      z-index: -1;
+      pointer-events: none;
+      transition: background 1.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    /* High Sci-Fi Hologram Floor Grid */
+    .hologram-grid {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(212, 175, 55, 0.006) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(212, 175, 55, 0.006) 1px, transparent 1px);
+      background-size: 50px 50px;
+      background-position: center center;
+      z-index: -1;
+      transform: rotateX(70deg) translateZ(-160px);
+      transform-origin: center bottom;
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    /* Click Ripple Wave */
+    .shockwave {
+      position: absolute;
+      border-radius: 50%;
+      border: 1.5px solid var(--wave-color, var(--gold));
+      background: transparent;
+      pointer-events: none;
+      z-index: 5;
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+      animation: ripple-out 0.8s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+    }
+
+    @keyframes ripple-out {
+      0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
+      100% { transform: translate(-50%, -50%) scale(6); opacity: 0; }
+    }
+
+    /* ===== Top Official Academic Header ===== */
+    header {
+      border-bottom: 1px solid var(--glass-border);
+      padding: 16px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(2, 7, 6, 0.3);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      z-index: 100;
+      transition: border-color 0.5s ease;
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo {
+      width: 48px;
+      height: 48px;
+      padding: 3px;
+      background: #ffffff;
+      border: 1.5px solid var(--glass-border);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      transition: border-color 0.4s ease;
+    }
+
+    .brand-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .brand-titles {
+      text-align: right;
+    }
+
+    .brand-titles h1 {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--text-main);
+      letter-spacing: -0.2px;
+    }
+
+    .brand-titles p {
+      font-family: 'Amiri', serif;
+      font-size: 12.5px;
+      color: var(--gold);
+      font-weight: 700;
+      margin-top: 1px;
+    }
+
+    .header-widgets {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .date-widget {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-sub);
+      border-left: 1.5px solid var(--glass-border);
+      padding-left: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      direction: ltr; /* Keeps digital time reading left to right */
+    }
+
+    .date-widget .iraq-time-span {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14.5px;
+      color: var(--gold);
+      font-weight: 800;
+      margin-left: 5px;
+    }
+
+    .date-widget i {
+      color: var(--gold);
+      font-size: 13px;
+    }
+
+    .widget-btn {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--gold);
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .widget-btn:hover {
+      border-color: var(--gold);
+      background: rgba(212, 175, 55, 0.1);
+      transform: scale(1.06);
+    }
+
+    /* ===== Immersive Central Orbit Constellation Area ===== */
+    .viewport-container {
+      flex: 1;
+      width: 100%;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .orbit-container {
+      position: relative;
+      width: 600px;
+      height: 600px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transform-style: preserve-3d;
+      transition: transform 0.25s ease-out; /* Mouse Parallax */
+      z-index: 10;
+    }
+
+    /* Dynamic SVG Connecting Lasers Overlay */
+    .svg-lasers {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .svg-lasers path {
+      fill: none;
+      stroke: var(--laser-idle);
+      stroke-width: 1.5;
+      stroke-dasharray: 6, 6;
+      transition: stroke 0.4s ease, stroke-width 0.4s ease;
+    }
+
+    .svg-lasers path.active {
+      stroke: var(--gold);
+      stroke-width: 2.5px;
+      stroke-dasharray: none;
+      filter: drop-shadow(0 0 6px var(--gold));
+    }
+
+    /* Flying neon comet travel dot on active lasers */
+    .svg-lasers circle {
+      fill: var(--gold);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .svg-lasers circle.active {
+      opacity: 1;
+      animation: pulse-travel 2.2s linear infinite;
+    }
+
+    @keyframes pulse-travel {
+      0% { offset-distance: 0%; }
+      100% { offset-distance: 100%; }
+    }
+
+    /* Cosmic Central Core */
+    .cosmic-core-wrapper {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      transform-style: preserve-3d;
+    }
+
+    .cosmic-center {
+      width: 154px;
+      height: 154px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      border: 2px solid var(--gold);
+      box-shadow: var(--core-glow), inset var(--core-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      animation: pulse-core 5s infinite ease-in-out;
+      transform-style: preserve-3d;
+      z-index: 2;
+    }
+
+    .cosmic-center img {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.35));
+      transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .cosmic-center:hover img {
+      transform: scale(1.08) rotate(5deg);
+    }
+
+    /* Rotating Concentric Rings */
+    .radar-ring {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      border: 1px solid rgba(212, 175, 55, 0.08);
+      transition: all 0.5s ease;
+    }
+
+    .radar-ring-1 {
+      width: 320px;
+      height: 320px;
+      border-style: dashed;
+      animation: spin-clockwise 24s linear infinite;
+    }
+
+    .radar-ring-2 {
+      width: 480px;
+      height: 480px;
+      border-style: dotted;
+      border-width: 1.5px;
+      animation: spin-counter 36s linear infinite;
+    }
+
+    .radar-ring-3 {
+      width: 610px;
+      height: 610px;
+      border-color: rgba(212, 175, 55, 0.03);
+      animation: spin-clockwise 60s linear infinite;
+    }
+
+    /* HUD system markings on outer ring */
+    .radar-ring-hud {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      border: 1px solid rgba(212, 175, 55, 0.03);
+      pointer-events: none;
+    }
+    .radar-ring-hud::before {
+      content: 'KUFA URBAN PLANNING CORE';
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 8px;
+      color: var(--gold);
+      opacity: 0.5;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+    }
+
+    @keyframes spin-clockwise {
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes spin-counter {
+      100% { transform: rotate(-360deg); }
+    }
+
+    @keyframes pulse-core {
+      0%, 100% { transform: scale(1); box-shadow: var(--core-glow); }
+      50% { transform: scale(1.03); box-shadow: 0 0 65px rgba(212, 175, 55, 0.55); border-color: var(--gold); }
+    }
+
+    /* Orbiting Nodes (Kevlar Planets) */
+    .orbit-node {
+      position: absolute;
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      border: 2px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--gold);
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+      transform-style: preserve-3d;
+      transition: border-color 0.4s ease, box-shadow 0.4s ease;
+      z-index: 5;
+    }
+
+    /* Circle gauges orbiting the nodes */
+    .orbit-node::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 1.5px solid transparent;
+      border-left-color: var(--gold);
+      border-right-color: var(--gold);
+      opacity: 0.35;
+      animation: spin-clockwise 6s linear infinite;
+    }
+
+    .orbit-node:hover {
+      transform: scale(1.18) translateZ(40px) !important;
+      box-shadow: 0 0 35px var(--gold), inset 0 0 15px rgba(255,255,255,0.1);
+      background: var(--gold);
+      color: var(--bg-color);
+      border-color: transparent;
+    }
+
+    .orbit-node:hover::after {
+      inset: -10px;
+      border-color: var(--gold);
+      opacity: 1;
+      animation-duration: 2s;
+    }
+
+    /* Custom Labels */
+    .node-label {
+      position: absolute;
+      bottom: -36px;
+      white-space: nowrap;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-main);
+      background: var(--label-bg);
+      padding: 4px 12px;
+      border-radius: 6px;
+      border: 1.5px solid var(--label-border);
+      pointer-events: none;
+      backdrop-filter: blur(4px);
+      transition: all 0.3s;
+    }
+
+    .orbit-node:hover .node-label {
+      color: #ffffff;
+      background: var(--teal-primary);
+      border-color: var(--gold);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+
+    /* ===== Detailed HUD Visor Panel (Right Sidebar) ===== */
+    .hud-glass-panel {
+      position: absolute;
+      right: 40px;
+      top: 40px;
+      width: 330px;
+      background: var(--glass-bg);
+      border: 1.5px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 28px;
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.55);
+      z-index: 15;
+      opacity: 0;
+      transform: translateX(60px);
+      transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+      overflow: hidden;
+    }
+
+    .hud-glass-panel::before, .hud-glass-panel::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border: 2px solid var(--gold);
+      pointer-events: none;
+    }
+    .hud-glass-panel::before { top: 12px; right: 12px; border-bottom: none; border-left: none; }
+    .hud-glass-panel::after { bottom: 12px; left: 12px; border-top: none; border-right: none; }
+
+    /* Laser scanner line sweeping */
+    .scanner-line {
+      position: absolute;
+      top: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      box-shadow: 0 0 6px var(--gold);
+      opacity: 0.4;
+      animation: scan 4s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes scan {
+      0% { top: 0%; }
+      50% { top: 100%; }
+      100% { top: 0%; }
+    }
+
+    .hud-glass-panel.active {
+      opacity: 1;
+      transform: translateX(0);
+      box-shadow: 0 0 35px rgba(212, 175, 55, 0.15);
+    }
+
+    .hud-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .hud-header h3 {
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: -0.2px;
+    }
+
+    .hud-badge {
+      font-size: 9.5px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--glass-border);
+    }
+
+    .hud-body p {
+      font-size: 12.5px;
+      color: var(--text-desc);
+      line-height: 1.8;
+      margin-bottom: 24px;
+      min-height: 70px;
+    }
+
+    .hud-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold);
+      color: var(--bg-color);
+      text-decoration: none;
+      padding: 11px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 800;
+      width: 100%;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+      transition: all 0.3s ease;
+    }
+
+    .hud-btn:hover {
+      background: var(--text-main);
+      color: var(--bg-color);
+      transform: translateY(-2px);
+    }
+
+    .hud-btn.soon-action {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-sub);
+      border: 1px solid var(--glass-border);
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+    
+    .hud-btn.soon-action:hover {
+      transform: none;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    /* Left Control HUD Box */
+    .control-panel {
+      position: absolute;
+      left: 40px;
+      top: 40px;
+      width: 310px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 15;
+    }
+
+    .control-box {
+      background: var(--glass-bg);
+      border: 1.5px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 22px;
+      backdrop-filter: var(--glass-blur);
+    }
+
+    .control-box h2 {
+      font-size: 16px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .control-box p {
+      font-size: 11.5px;
+      color: var(--text-desc);
+      line-height: 1.7;
+    }
+
+    /* Digital System Status Panel widget */
+    .system-status-widget {
+      background: var(--glass-bg);
+      border: 1.5px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 14px 20px;
+      backdrop-filter: var(--glass-blur);
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 11px;
+    }
+
+    .status-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .status-row span {
+      color: var(--text-sub);
+    }
+
+    .status-row b {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+    }
+
+    .status-online {
+      color: var(--success);
+    }
+
+    /* Mobile Fallback Grid (Bento Layout) */
+    .mobile-grid-container {
+      display: none;
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px 8% 60px;
+      flex-direction: column;
+      gap: 20px;
+      z-index: 10;
+    }
+
+    .mobile-hero {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .mobile-hero h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .mobile-hero p {
+      font-size: 12.5px;
+      color: var(--text-desc);
+      line-height: 1.7;
+    }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .bento-card {
+      background: var(--glass-bg);
+      border: 1.5px solid var(--glass-border);
+      border-radius: 18px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .bento-card:hover {
+      border-color: var(--glass-border-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.08);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(212, 175, 55, 0.08);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .bento-card:hover .card-icon {
+      background: var(--gold);
+      color: var(--bg-color);
+    }
+
+    .card-badge {
+      font-size: 9.5px;
+      font-weight: 800;
+      border-radius: 4px;
+      padding: 2.5px 8px;
+      border: 1px solid var(--glass-border);
+      color: var(--gold);
+    }
+
+    .card-badge.active {
+      color: var(--success);
+      border-color: rgba(16, 185, 129, 0.25);
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    .card-body h3 {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .card-body p {
+      font-size: 12px;
+      color: var(--text-sub);
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    .card-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--gold);
+      text-decoration: none;
+      transition: gap 0.3s;
+    }
+
+    .bento-card:hover .card-btn {
+      gap: 10px;
+    }
+
+    .card-btn.locked {
+      color: var(--text-sub);
+      cursor: not-allowed;
+    }
+
+    /* ===== Suggestion Modal overlay ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 5, 4, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--bg-color);
+      border: 1.5px solid var(--glass-border);
+      border-radius: 24px;
+      width: 440px;
+      max-width: 100%;
+      padding: 30px;
+      position: relative;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      transition: all 0.3s;
+    }
+
+    .modal-close:hover {
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+      border-color: rgba(239, 68, 68, 0.25);
+    }
+
+    .modal-title {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      text-align: center;
+      color: var(--gold);
+    }
+
+    .modal-desc {
+      font-size: 12.5px;
+      color: var(--text-desc);
+      line-height: 1.75;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: right;
+    }
+
+    .modal-form label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-sub);
+    }
+
+    .modal-form textarea {
+      background: rgba(0,0,0,0.25);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 12px;
+      color: white;
+      font-family: 'Cairo', sans-serif;
+      font-size: 13px;
+      outline: none;
+      resize: none;
+      transition: border-color 0.3s;
+    }
+
+    .modal-form textarea:focus {
+      border-color: var(--gold);
+    }
+
+    .submit-btn {
+      background: var(--gold);
+      color: var(--bg-color);
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .submit-btn:hover {
+      background: var(--text-main);
+      color: var(--bg-color);
+    }
+
+    /* Success Toast styling */
+    .success-toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--teal-primary);
+      border: 1.5px solid var(--glass-border);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 12.5px;
+      z-index: 1000;
+      transform: translateY(50px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-shadow: 0 10px 25px rgba(0, 105, 92, 0.25);
+    }
+
+    .success-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Elegant Academic Footer */
+    footer {
+      border-top: 1px solid var(--glass-border);
+      padding: 18px 8%;
+      background: rgba(2, 7, 6, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11.5px;
+      color: var(--text-sub);
+      z-index: 20;
+    }
+
+    footer p b {
+      color: var(--gold);
+    }
+
+    /* ===== Responsive Morphing Styles ===== */
+    @media (max-width: 992px) {
+      body {
+        overflow-y: auto;
+      }
+
+      .viewport-container {
+        display: none; /* Hide interactive constellation */
+      }
+
+      .mobile-grid-container {
+        display: flex; /* Show structured bento grid */
+      }
+
+      header {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+        padding: 15px;
+      }
+
+      .date-widget {
+        border-left: none;
+        padding-left: 0;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- WebGL-like Canvas Backdrop -->
+  <canvas id="nebulaCanvas"></canvas>
+  <div class="ambient-glow" id="ambientGlow"></div>
+  <div class="hologram-grid"></div>
+
+  <!-- Top Academic Header -->
+  <header>
+    <div class="brand-container">
+      <div class="brand-logo">
+        <img src="https://iunajaf.edu.iq/wp-content/uploads/2022/07/ku_logo_color_400x400.png" alt="شعار جامعة الكوفة" onerror="this.parentNode.style.display='none'">
+      </div>
+      <div class="brand-titles">
+        <h1>جامعة الكوفة </h1>
+        <p>كلية التخطيط العمراني</p>
+      </div>
+    </div>
+
+    <div class="header-widgets">
+      <div class="date-widget">
+        <i class="fa-regular fa-clock"></i>
+        <span class="iraq-time-span" id="iraqClock">--:--:--</span>
+        <span id="iraqDate">-- --- ----</span>
+      </div>
+
+      <button class="widget-btn" onclick="toggleTheme()" title="DarkMode">
+        <i class="fa-solid fa-circle-half-stroke"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Desktop Viewport: 3D Constellation Orbit -->
+  <div class="viewport-container">
+    
+
+
+    <!-- The 3D Constellation Orbit Container -->
+    <div class="orbit-container" id="orbitContainer">
+      
+      <!-- Lasers SVG Connector -->
+      <svg class="svg-lasers" id="svgLasers">
+        <path id="laser-1" d="" />
+        <path id="laser-2" d="" />
+        <path id="laser-3" d="" />
+        <path id="laser-4" d="" />
+        <path id="laser-5" d="" />
+        
+        <!-- Flying light dots traveling along the paths -->
+        <circle id="pulseDot-1" r="3.5" class="pulse-circle" />
+        <circle id="pulseDot-2" r="3.5" class="pulse-circle" />
+        <circle id="pulseDot-3" r="3.5" class="pulse-circle" />
+        <circle id="pulseDot-4" r="3.5" class="pulse-circle" />
+        <circle id="pulseDot-5" r="3.5" class="pulse-circle" />
+      </svg>
+
+      <!-- Center Logo Core -->
+      <div class="cosmic-core-wrapper" id="cosmicCoreWrapper">
+        <div class="cosmic-center" id="cosmicCore">
+          <img src="https://iunajaf.edu.iq/wp-content/uploads/2022/07/ku_logo_color_400x400.png" alt="جامعة الكوفة" onerror="this.style.display='none'">
+        </div>
+        <!-- Concentric spinning rings -->
+        <div class="radar-ring radar-ring-1"></div>
+        <div class="radar-ring radar-ring-2"></div>
+        <div class="radar-ring radar-ring-3"></div>
+        <div class="radar-ring-hud"></div>
+      </div>
+
+      <!-- Orbit Nodes (Planets) -->
+      
+      <!-- Node 1: Undergraduate -->
+      <div class="orbit-node node-1" id="node-1" data-index="1"
+           data-title="منظومة الدراسات الأولية" 
+           data-desc="المنصة الإلكترونية المعتمدة لطلبة الدراسات الأولية لأصدار وثائق التخرج."
+           data-link="https://g.physplan.com/" 
+           data-badge="نشط" data-rgb="212, 175, 55"
+           onclick="handleNodeClick('https://g.physplan.com/', event)">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span class="node-label">منظومة الدراسات الاولية</span>
+      </div>
+
+      <!-- Node 2: Postgraduate -->
+      <div class="orbit-node node-2" id="node-2" data-index="2"
+           data-title="منظومة الدراسات العليا" 
+           data-desc="بوابة إدارة شؤون طلبة الدراسات العليا والتقديم ، بشكل الكتروني ."
+           data-link="https://p.physplan.com/" 
+           data-badge="نشط" data-rgb="212, 175, 55"
+           onclick="handleNodeClick('https://p.physplan.com/', event)">
+        <i class="fa-solid fa-user-graduate"></i>
+        <span class="node-label">منظومة الدراسات العليا</span>
+      </div>
+
+      <!-- Node 3: Correspondence -->
+      <div class="orbit-node node-3" id="node-3" data-index="3"
+           data-title="نظام الصادرة الإلكتروني" 
+           data-desc="نظام الصادرة الالكترونية في الشؤون العلمية."
+           data-link="https://1.physplan.com/" 
+           data-badge="نشط" data-rgb="212, 175, 55"
+           onclick="handleNodeClick('https://1.physplan.com/', event)">
+        <i class="fa-solid fa-envelope-open-text"></i>
+        <span class="node-label">نظام الصادرة الالكتروني</span>
+      </div>
+
+      <!-- Node 4: Quality Audit -->
+      <div class="orbit-node node-4" id="node-4" data-index="4"
+           data-title="نظام التدقيق (الرصانة العلمية)" 
+           data-desc="أداة التحقق من رصانة المجلات العلمية وتوثيق بحوث الهيئات التدريسية والترقيات بالتنسيق مع قسم الشؤون العلمية في الكلية."
+           data-link="soon-audit" 
+           data-badge="قريباً" data-rgb="212, 175, 55"
+           onclick="handleSoonNode('نظام التدقيق والرصانة العلمية', 'يجري العمل على إصدار النسخة النهائية قريباً.', event)">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span class="node-label">نظام تدقيق البحوث </span>
+      </div>
+
+      <!-- Node 5: Coming Soon -->
+      <div class="orbit-node node-5" id="node-5" data-index="5"
+           data-title="بوابة الخدمات الجديدة" 
+           data-desc="باقة إضافية من الخدمات الطلابية والادارية نعمل على إدراجها تدريجياً لدعم التحول الرقمي الشامل داخل الكلية."
+           data-link="soon-general" 
+           data-badge="قريباً" data-rgb="143, 165, 160"
+           onclick="handleSoonNode('خدمات إلكترونية إضافية', 'تخطط الكلية لإطلاق خدمات اضافية لدعم  الخريجين،   قريباً.', event)">
+        <i class="fa-solid fa-cubes-stacked"></i>
+        <span class="node-label">خدمات أخرى</span>
+      </div>
+
+    </div>
+
+    <!-- Right HUD Details Panel -->
+    <div class="hud-glass-panel" id="hudPanel">
+      <div class="scanner-line"></div>
+      <div class="hud-header">
+        <h3 id="hudTitle" style="color: var(--gold);">منظومة الخدمة</h3>
+        <span class="hud-badge" id="hudBadge">تحليل البيانات</span>
+      </div>
+      <div class="hud-body">
+        <p id="hudDesc">.</p>
+        <a href="#" target="_blank" class="hud-btn" id="hudActionBtn">
+          دخول الى الخدمة <i class="fa-solid fa-arrow-left" style="margin-right: 8px;"></i>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Mobile Fallback: Bento Grid -->
+  <div class="mobile-grid-container">
+    <div class="mobile-hero">
+      <h2 style="font-family: 'Amiri', serif; font-size: 24px; color: var(--gold);">البوابة الإلكترونية </h2>
+      <p>.</p>
+    </div>
+
+    <div class="bento-grid">
+      
+      <!-- Card 1 -->
+      <div class="bento-card" onclick="window.open('https://g.physplan.com/', '_blank')">
+        <div class="card-top">
+          <div class="card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+          <span class="card-badge active">نشط</span>
+        </div>
+        <div class="card-body">
+          <h3>منظومة الدراسات الأولية</h3>
+          <p>.</p>
+          <span class="card-btn">دخول النظام <i class="fa-solid fa-arrow-left"></i></span>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="bento-card" onclick="window.open('https://p.physplan.com/', '_blank')">
+        <div class="card-top">
+          <div class="card-icon"><i class="fa-solid fa-user-graduate"></i></div>
+          <span class="card-badge active">نشط</span>
+        </div>
+        <div class="card-body">
+          <h3>منظومة الدراسات العليا</h3>
+          <p>إدارة طلبات التقديم ، شؤون طلبة الدبلوم العالي و الماجستير والدكتوراه  .</p>
+          <span class="card-btn">دخول النظام <i class="fa-solid fa-arrow-left"></i></span>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="bento-card" onclick="window.open('https://1.physplan.com/', '_blank')">
+        <div class="card-top">
+          <div class="card-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+          <span class="card-badge active">نشط</span>
+        </div>
+        <div class="card-body">
+          <h3>نظام الصادرة الإلكتروني</h3>
+          <p>نظام الصادرة الالكترونية في الشؤون العلمية.</p>
+          <span class="card-btn">دخول النظام <i class="fa-solid fa-arrow-left"></i></span>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="bento-card" onclick="handleSoonNode('نظام التدقيق والرصانة العلمية', 'يجري العمل على أصدار النسخة النهائية  قريباً بالتعاون مع لجنة الشؤون العلمية في الكلية.', event)">
+        <div class="card-top">
+          <div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <span class="card-badge">قريباً</span>
+        </div>
+        <div class="card-body">
+          <h3>نظام التدقيق (الرصانة العلمية)</h3>
+          <p>فحص رصانة المجلات العلمية، .</p>
+          <span class="card-btn locked">قيد الإعداد <i class="fa-solid fa-lock"></i></span>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="bento-card" onclick="handleSoonNode('خدمات إلكترونية إضافية', 'تخطط الكلية لإطلاق خدمات الدعم الفني، بوابات الخريجين، واستطلاعات التقييم قريباً.', event)">
+        <div class="card-top">
+          <div class="card-icon"><i class="fa-solid fa-cubes-stacked"></i></div>
+          <span class="card-badge">قريباً</span>
+        </div>
+        <div class="card-body">
+          <h3>خدمات أخرى قريباً</h3>
+          <p>.</p>
+          <span class="card-btn locked">قيد الإعداد <i class="fa-solid fa-lock"></i></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Suggestion Feedback Modal -->
+  <div class="modal-overlay" id="soonModal" onclick="closeSoonModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="toggleSoonModal(false)">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <h3 class="modal-title" id="modalTitle">اسم المنظومة</h3>
+      <p class="modal-desc" id="modalDesc">معلومات حول المنظومة المقترحة.</p>
+      
+      <form class="modal-form" onsubmit="submitSuggestion(event)">
+        <label for="sugText">يسعدنا تلقي ملاحظاتكم لتضمينها  :</label>
+        <textarea id="sugText" rows="3" placeholder="أدخل اقتراحك  هنا..." required></textarea>
+        <button type="submit" class="submit-btn">إرسال المقترح</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Success Toast Notification -->
+  <div class="success-toast" id="successToast">
+    تم إرسال المقترح بنجاح. شكراً 
+  </div>
+
+  <!-- Immersive Academic Footer -->
+  <footer>
+    <p>كلية التخطيط العمراني - جامعة الكوفة © 2026. جميع الحقوق محفوظة.</p>
+    <p> <b>Eng.Ali Al-Waily
+	</b></p>
+  </footer>
+
+  <script>
+    // ===== Local Baghdad Clock & Date Widget =====
+    function updateClock() {
+      const now = new Date();
+      
+      // Time Formatting
+      const timeOptions = {
+        timeZone: 'Asia/Baghdad',
+        hour12: true,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      };
+      const timeFormatter = new Intl.DateTimeFormat('en-US', timeOptions);
+      document.getElementById('iraqClock').textContent = timeFormatter.format(now);
+
+      // Date Formatting (Arabic)
+      const dateOptions = {
+        timeZone: 'Asia/Baghdad',
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      };
+      const dateFormatter = new Intl.DateTimeFormat('ar-IQ', dateOptions);
+      document.getElementById('iraqDate').textContent = dateFormatter.format(now);
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+
+
+    // ===== Theme Persistence & Toggle =====
+    function initTheme() {
+      const savedTheme = localStorage.getItem('uok-portal-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('uok-portal-theme', newTheme);
+    }
+    initTheme();
+
+
+
+    // ===== Dynamic Mouse 3D Parallax Tilt =====
+    const orbitContainer = document.getElementById('orbitContainer');
+    const cosmicCoreWrapper = document.getElementById('cosmicCoreWrapper');
+
+    window.addEventListener('mousemove', (e) => {
+      if (window.innerWidth <= 992) return; // Disable parallax on tablet/mobile
+
+      const normX = (e.clientX / window.innerWidth) - 0.5; 
+      const normY = (e.clientY / window.innerHeight) - 0.5; 
+
+      orbitContainer.style.transform = `rotateX(${normY * -12}deg) rotateY(${normX * 12}deg)`;
+      cosmicCoreWrapper.style.transform = `translateZ(15px) rotateX(${normY * -3}deg) rotateY(${normX * 3}deg)`;
+    });
+
+    // ===== Dynamic Planetary Orbit Loop =====
+    const numNodes = 5;
+    const baseRadius = 230; 
+    const nodes = document.querySelectorAll('.orbit-node');
+    const svgLasers = document.getElementById('svgLasers');
+
+    // Initialize planetary orbital variables
+    let currentSpeed = 0.002;
+    let targetSpeed = 0.002;
+    const baseSpeed = 0.002;
+
+    nodes.forEach((node, i) => {
+      // Set initial spacing angle for each card/node
+      node.orbitAngle = (i * 2 * Math.PI / numNodes) - (Math.PI / 2);
+    });
+
+    // Main animation loop updating positions and laser strings
+    function orbitLoop() {
+      if (window.innerWidth > 992) {
+        // Physics speed interpolation
+        currentSpeed += (targetSpeed - currentSpeed) * 0.06;
+
+        const core = document.getElementById('cosmicCore');
+        const centerX = core.offsetLeft + core.offsetWidth / 2;
+        const centerY = core.offsetTop + core.offsetHeight / 2;
+
+        nodes.forEach(node => {
+          // Increment angle by current speed
+          node.orbitAngle += currentSpeed;
+
+          // Project coordinates
+          const x = Math.round(baseRadius * Math.cos(node.orbitAngle));
+          const y = Math.round(baseRadius * Math.sin(node.orbitAngle));
+
+          // Set absolute position
+          node.style.left = `calc(50% + ${x}px - ${node.offsetWidth/2}px)`;
+          node.style.top = `calc(50% + ${y}px - ${node.offsetHeight/2}px)`;
+
+          // Recalculate dynamic laser bezier path strings
+          const idx = node.getAttribute('data-index');
+          const path = document.getElementById(`laser-${idx}`);
+          if (path) {
+            const nodeX = node.offsetLeft + node.offsetWidth / 2;
+            const nodeY = node.offsetTop + node.offsetHeight / 2;
+
+            const ctrlX = (centerX + nodeX) / 2 + (centerY - nodeY) * 0.1;
+            const ctrlY = (centerY + nodeY) / 2 + (nodeX - centerX) * 0.1;
+
+            const pathD = `M ${centerX} ${centerY} Q ${ctrlX} ${ctrlY} ${nodeX} ${nodeY}`;
+            path.setAttribute('d', pathD);
+
+            // Re-apply path to flying light comets
+            const dot = document.getElementById(`pulseDot-${idx}`);
+            if (dot) {
+              dot.style.offsetPath = `path('${pathD}')`;
+              dot.style.webkitOffsetPath = `path('${pathD}')`;
+            }
+          }
+        });
+      }
+      requestAnimationFrame(orbitLoop);
+    }
+    requestAnimationFrame(orbitLoop);
+
+    // ===== Shockwave click ripple creator =====
+    function createShockwave(x, y, color) {
+      const div = document.createElement('div');
+      div.className = 'shockwave';
+      div.style.left = `${x}px`;
+      div.style.top = `${y}px`;
+      div.style.setProperty('--wave-color', color);
+      document.body.appendChild(div);
+      setTimeout(() => div.remove(), 800);
+    }
+
+    // Direct clicks on body background emit waves
+    window.addEventListener('click', (e) => {
+      if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'A' && !e.target.closest('.orbit-node')) {
+        createShockwave(e.clientX, e.clientY, 'var(--gold)');
+      }
+    });
+
+    // ===== Typewriter Diagnostic Terminal inside HUD =====
+    let typingTimer = null;
+    function typeHUDDescription(text) {
+      const descEl = document.getElementById('hudDesc');
+      descEl.textContent = "";
+      let index = 0;
+      
+      clearInterval(typingTimer);
+      typingTimer = setInterval(() => {
+        if (index < text.length) {
+          descEl.textContent += text.charAt(index);
+          index++;
+        } else {
+          clearInterval(typingTimer);
+        }
+      }, 7); // Typing speed
+    }
+
+    // ===== Node Interactions =====
+    nodes.forEach(node => {
+      node.addEventListener('mouseenter', () => {
+        // Slow down orbit rotation speed to zero (physics ease will handle the glide to halt)
+        targetSpeed = 0;
+
+        const title = node.getAttribute('data-title');
+        const desc = node.getAttribute('data-desc');
+        const link = node.getAttribute('data-link');
+        const badge = node.getAttribute('data-badge');
+        const rgb = node.getAttribute('data-rgb');
+        const idx = node.getAttribute('data-index');
+
+        // Illuminate connecting laser line and traveler dot
+        const laser = document.getElementById(`laser-${idx}`);
+        const pulse = document.getElementById(`pulseDot-${idx}`);
+        if (laser) laser.classList.add('active');
+        if (pulse) pulse.classList.add('active');
+
+        // Shockwave ripple at node center
+        const rect = node.getBoundingClientRect();
+        createShockwave(rect.left + rect.width/2, rect.top + rect.height/2, 'var(--gold)');
+
+        // Background aura glow shift
+        const ambient = document.getElementById('ambientGlow');
+        ambient.style.background = `radial-gradient(circle at center, rgba(${rgb}, 0.16) 0%, transparent 60%)`;
+
+        // Update details panel
+        const panel = document.getElementById('hudPanel');
+        document.getElementById('hudTitle').textContent = title;
+        typeHUDDescription(desc);
+
+        const badgeEl = document.getElementById('hudBadge');
+        badgeEl.textContent = badge;
+        badgeEl.style.backgroundColor = `rgba(${rgb}, 0.15)`;
+        badgeEl.style.color = 'var(--gold)';
+        badgeEl.style.border = `1px solid rgba(${rgb}, 0.35)`;
+
+        // Action CTA entry button
+        const actionBtn = document.getElementById('hudActionBtn');
+        if (link.startsWith('soon')) {
+          actionBtn.classList.add('soon-action');
+          actionBtn.href = '#';
+          actionBtn.innerHTML = `قريباً <i class="fa-solid fa-lock" style="margin-right: 8px;"></i>`;
+        } else {
+          actionBtn.classList.remove('soon-action');
+          actionBtn.href = link;
+          actionBtn.style.boxShadow = `0 6px 20px rgba(${rgb}, 0.35)`;
+          actionBtn.innerHTML = `دخول الى الخدمة <i class="fa-solid fa-arrow-left" style="margin-right: 8px;"></i>`;
+        }
+        panel.classList.add('active');
+      });
+
+      node.addEventListener('mouseleave', () => {
+        // Accelerate orbit rotation speed back to base speed
+        targetSpeed = baseSpeed;
+
+        const idx = node.getAttribute('data-index');
+        const laser = document.getElementById(`laser-${idx}`);
+        const pulse = document.getElementById(`pulseDot-${idx}`);
+        if (laser) laser.classList.remove('active');
+        if (pulse) pulse.classList.remove('active');
+
+        const ambient = document.getElementById('ambientGlow');
+        ambient.style.background = `radial-gradient(circle at center, rgba(212, 175, 55, 0.04) 0%, transparent 60%)`;
+      });
+    });
+
+    function handleNodeClick(url, e) {
+      createShockwave(e.clientX, e.clientY, 'var(--success)');
+      if (url) setTimeout(() => window.open(url, '_blank'), 150);
+    }
+
+    function handleSoonNode(title, desc, e) {
+      createShockwave(e.clientX, e.clientY, 'var(--gold)');
+      setTimeout(() => {
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalDesc').textContent = desc;
+        document.getElementById('sugText').value = '';
+        toggleSoonModal(true);
+      }, 150);
+    }
+
+    // ===== Suggestion Modal and Success Toast Functionality =====
+    function toggleSoonModal(isOpen) {
+      const modal = document.getElementById('soonModal');
+      if (isOpen) {
+        modal.classList.add('open');
+      } else {
+        modal.classList.remove('open');
+      }
+    }
+
+    function closeSoonModal(e) {
+      toggleSoonModal(false);
+    }
+
+    function submitSuggestion(e) {
+      e.preventDefault();
+      toggleSoonModal(false);
+      
+      const toast = document.getElementById('successToast');
+      toast.classList.add('show');
+      setTimeout(() => { toast.classList.remove('show'); }, 3500);
+    }
+
+    // ===== HTML5 Canvas Constellation Particles Background =====
+    const canvas = document.getElementById('nebulaCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    let particles = [];
+    const numParticles = 75;
+
+    // Attractor values (attracts gold dust stars to active nodes/logo or cursor)
+    let attractorX = window.innerWidth / 2;
+    let attractorY = window.innerHeight / 2;
+    let hasAttractor = false;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() {
+        this.reset();
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+      }
+      
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.4;
+        this.vy = (Math.random() - 0.5) * 0.4;
+        this.radius = Math.random() * 2 + 0.5;
+        this.opacity = Math.random() * 0.5 + 0.35;
+      }
+      
+      update() {
+        // Gravitational Swarm Mechanics
+        if (hasAttractor && window.innerWidth > 992) {
+          const dx = attractorX - this.x;
+          const dy = attractorY - this.y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < 320) {
+            // Apply slight gravitational force acceleration
+            this.vx += (dx / dist) * 0.015;
+            this.vy += (dy / dist) * 0.015;
+          }
+        }
+
+        this.x += this.vx;
+        this.y += this.vy;
+        
+        // Speed cap to prevent orbital escape velocities
+        const speed = Math.sqrt(this.vx*this.vx + this.vy*this.vy);
+        if (speed > 1.2) {
+          this.vx = (this.vx / speed) * 1.2;
+          this.vy = (this.vy / speed) * 1.2;
+        }
+
+        // Wrap boundaries
+        if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+        if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+      }
+      
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const fillThemeColor = currentTheme === 'light' ? `rgba(140, 109, 62, ${this.opacity})` : `rgba(212, 175, 55, ${this.opacity})`;
+        ctx.fillStyle = fillThemeColor;
+        ctx.shadowBlur = this.radius * 3;
+        ctx.shadowColor = currentTheme === 'light' ? 'rgba(140,109,62,0.2)' : 'rgba(212,175,55,0.4)';
+        ctx.fill();
+        ctx.shadowBlur = 0; // reset for rendering speed optimization
+      }
+    }
+
+    for (let i = 0; i < numParticles; i++) {
+      particles.push(new Particle());
+    }
+
+    // Connect node attractors on mouse movement
+    window.addEventListener('mousemove', (e) => {
+      if (window.innerWidth <= 992) {
+        hasAttractor = false;
+        return;
+      }
+      
+      // Cursor acts as a secondary attractor
+      attractorX = e.clientX;
+      attractorY = e.clientY;
+      hasAttractor = true;
+    });
+
+    window.addEventListener('mouseleave', () => {
+      hasAttractor = false;
+    });
+
+    // Canvas rendering loop
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+        
+        // Render interconnecting constellation lines between nearby particles
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          
+          if (dist < 130) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            const opacity = (1 - dist / 130) * 0.08;
+            ctx.strokeStyle = currentTheme === 'light' ? `rgba(140,109,62,${opacity})` : `rgba(212,175,55,${opacity})`;
+            ctx.lineWidth = 0.65;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+  </script>
+</body>
+</html>
